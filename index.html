@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>About.Blank </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .banner {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 2em;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+
+    .top-buttons {
+      margin-top: 10px;
+    }
+
+    .top-button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 1em;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .top-button:hover {
+      background-color: #777;
+    }
+
+    .search-container {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    #searchInput {
+      width: 60%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .game-button {
+      padding: 10px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .game-button:hover {
+      background-color: #45a049;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    .dark-mode .banner {
+      background-color: #222;
+    }
+
+    .dark-mode .top-button {
+      background-color: #666;
+    }
+
+    .dark-mode .top-button:hover {
+      background-color: #888;
+    }
+
+    .dark-mode .game-button {
+      background-color: #333;
+    }
+
+    .dark-mode .game-button:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="banner">
+    Unblocked Games
+    <div class="top-buttons">
+      <button class="top-button" onclick="panicRedirect()">Panic</button>
+      <button class="top-button" onclick="aboutBlankCloak()">Cloak</button>
+      <button class="top-button" onclick="fakeTab()">Fake Tab</button>
+      <button class="top-button" onclick="randomGame()">Random</button>
+      <button class="top-button" onclick="muteAllSounds()">Mute</button>
+      <button class="top-button" onclick="toggleStealth()">Stealth</button>
+      <button class="top-button" onclick="toggleDarkMode()">Dark Mode</button>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search games..." oninput="filterGames()" />
+  </div>
+
+  <div class="grid" id="buttonGrid"></div>
+
+  <script>
+    const gameNames = [
+     "Among us", "Achivement unlocked", "Achivement unlocked 2", "Achivement unlocked 3", "1v1.lol", "10 minutes til dawn", "agar.io lite",
+    "angry birds", "angry birds showdown", "angry birds space", "Aquapark.io", "a small world cup", "backrooms",
+    "backrooms 2D", "Backyard baseball", "bacon may die", "bad parenting (fake)", "bad piggies", "Baldi's Basics",
+    "Baldi’s fun new school ultimate", "bandit gunslingers", "bank robbery 2", "Basketball legends", "basketball stars",
+    "bitlife", "bleach vs. Naruto", "Capybara Clicker", "Cat Mario", "Black jack",
+    "Cookie clicker", "crossy road", "Doki doki literature club", "doomz.io", "Dig to china", "duck life 1",
+    "Duck life 2", "Duck life 3", "Duck life 4", "duck life 5", "DBZ - devolution", "Factory balls 1",
+    "Factory balls 2", "Factory balls 3", "factory balls 4", "Fire boy and water girl 1", "Fire boy and water girl 2", "Fire boy and water girl 3",
+    "5 Night's at baldi's redone", "5 Night's at shrek's hotel", "Flappy dunk", "FNAF", "FNAF 2", "FNAF 3",
+    "FNAF 4", "Fork N Sausage", "Friday Night Funkin", "Geomatry Dash Lite", "Granny", "Granny 2",
+    "Happy wheels", "Henry stickman Breaking into the bank", "Henry stickman escaping prison", "Henry Stickman stealing the diamond", "henry stickman flee the complex", "Henry stickman Airship",
+    "Harvest.io", "Gladdihoppers", "Going Balls", "Gun Spin", "Helix jump", "Infinite Craft",
+    "Justfall.lol", "Jetpack Joyride", "Learn to fly 1", "Learn to fly 2", "Learn to fly 3", "Basketball random",
+    "Melon Playground", "Raft Wars", "MotoX3m 1", "MotoX3m 2", "MotoX3m 3", "motoX3m poolparty",
+    "motoX3m spooky land", "motoX3m Winter", "Noob Miner", "Obby 99% will lose", "Only up", "Osu!",
+    "OvO", "OvO 2","Ovo 3", "Papa louie night hunt 2", "Papa louie when burgers attack",
+    "Papa louie when pizzas attack", "Papa louie when sundaes attack", "Papa's bakeria", "Papa's Burgeria", "Papa's Cheeseria", "Papa's Cupcakeria",
+    "Papa's dounteria", "Papa's Freezeria", "Papa's Hot doggeria", "Papa's Pancakeria", "Papa's Pastaria", "Papa's pizzeria",
+    "Papa's scooperia", "Papa's susheria", "Papa's taco mia", "Papa's wingeria",  "Pixel shooter", "Paper.io",
+    "Pizza tower PreAlpha", "Plants vs zombies", "Red ball 2", "Red Ball 3", "Red ball 4", "Red Ball vol 2", "Red ball vol 3", "Retro Bowl"
+   
+    ];
+
+    const buttonGrid = document.getElementById("buttonGrid");
+
+    for (let i = 0; i < gameNames.length; i++) {
+      const btn = document.createElement("button");
+      btn.className = "game-button";
+      btn.textContent = gameNames[i];
+      btn.onclick = () => {
+        window.location.href = `game${i + 1}.html`;
+      };
+      buttonGrid.appendChild(btn);
+    }
+
+    for (let i = gameNames.length + 1; i <= 120; i++) {
+      const btn = document.createElement("button");
+      btn.className = "game-button";
+      btn.textContent = "Game " + i;
+      btn.onclick = () => {
+        window.location.href = `game${i}.html`;
+      };
+      buttonGrid.appendChild(btn);
+    }
+
+    function panicRedirect() {
+      window.location.href = "https://www.mathplayground.com";
+    }
+
+    function aboutBlankCloak() {
+      const win = window.open("about:blank", "_blank");
+      const pageHTML = document.documentElement.outerHTML;
+      win.document.write(pageHTML);
+      win.document.close();
+    }
+
+    function fakeTab() {
+      const win = window.open("about:blank", "_blank");
+      win.document.write(`
+        <title>Google Docs</title>
+        <div style="font-family:Arial; padding:20px;">
+          <h1>Google Docs</h1>
+          <p>Loading...</p>
+        </div>
+      `);
+      win.document.close();
+    }
+
+    function randomGame() {
+      const gameNum = Math.floor(Math.random() * 120) + 1;
+      window.location.href = `game${gameNum}.html`;
+    }
+
+    function muteAllSounds() {
+      const media = document.querySelectorAll("audio, video");
+      media.forEach(m => m.muted = true);
+    }
+
+    function toggleStealth() {
+      const grid = document.getElementById("buttonGrid");
+      grid.style.display = grid.style.display === "none" ? "grid" : "none";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function filterGames() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const buttons = document.querySelectorAll(".game-button");
+      buttons.forEach(button => {
+        const text = button.textContent.toLowerCase();
+        button.style.display = text.includes(input) ? "block" : "none";
+      });
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener("keydown", function (event) {
+      const key = event.key.toLowerCase();
+      if (key === "escape") panicRedirect();
+      else if (key === "c") aboutBlankCloak();
+      else if (key === "f") fakeTab();
+      else if (key === "r") randomGame();
+      else if (key === "m") muteAllSounds();
+      else if (key === "h") toggleStealth();
+      else if (key === "d") toggleDarkMode();
+    });
+  </script>
+
+</body>
+</html>
